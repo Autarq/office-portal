@@ -4,6 +4,7 @@ metadata:
   name: office-portal-data
   namespace: eurooffice-shared
 spec:
+  storageClassName: longhorn-2x-nvme
   accessModes:
     - ReadWriteOnce
   resources:
