@@ -53,7 +53,7 @@ If `BASIC_AUTH_USER` and `BASIC_AUTH_PASSWORD` are set, browser-facing routes re
 
 ## Kubernetes
 
-The included manifests target the existing production namespace and use the public GHCR image built by CI:
+The included manifests target the existing production namespace. For the first MVP deployment, the pod clones this public repository and installs production npm dependencies during init. The Dockerfile and GHCR image build remain available for a later registry-backed deployment.
 
 ```text
 eurooffice-shared

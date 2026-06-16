@@ -63,12 +63,3 @@ jobs:
           tags: |
             ghcr.io/autarq/office-portal:main
             ghcr.io/autarq/office-portal:${{ github.sha }}
-
-      - name: Make GHCR package public
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh api \
-            --method PATCH \
-            /orgs/Autarq/packages/container/office-portal/visibility \
-            -f visibility=public

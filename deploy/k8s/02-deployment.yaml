@@ -15,10 +15,38 @@ spec:
       labels:
         app.kubernetes.io/name: office-portal
     spec:
+      initContainers:
+        - name: clone-source
+          image: alpine/git:2.49.1
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - |
+              rm -rf /work/app
+              git clone --depth=1 https://github.com/Autarq/office-portal.git /work/app
+          volumeMounts:
+            - name: app
+              mountPath: /work
+        - name: install-dependencies
+          image: node:24-alpine
+          imagePullPolicy: IfNotPresent
+          workingDir: /work/app
+          command:
+            - sh
+            - -c
+            - npm ci --omit=dev
+          volumeMounts:
+            - name: app
+              mountPath: /work
       containers:
         - name: office-portal
-          image: ghcr.io/autarq/office-portal:main
-          imagePullPolicy: Always
+          image: node:24-alpine
+          imagePullPolicy: IfNotPresent
+          workingDir: /work/app
+          command:
+            - node
+            - src/index.js
           ports:
             - name: http
               containerPort: 3000
@@ -61,9 +89,13 @@ spec:
             initialDelaySeconds: 20
             periodSeconds: 20
           volumeMounts:
+            - name: app
+              mountPath: /work
             - name: data
               mountPath: /data
       volumes:
+        - name: app
+          emptyDir: {}
         - name: data
           persistentVolumeClaim:
             claimName: office-portal-data
