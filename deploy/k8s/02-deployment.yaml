@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: office-portal
+  namespace: eurooffice-shared
+  labels:
+    app.kubernetes.io/name: office-portal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: office-portal
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: office-portal
+    spec:
+      containers:
+        - name: office-portal
+          image: ghcr.io/autarq/office-portal:main
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: PORT
+              value: "3000"
+            - name: PUBLIC_BASE_URL
+              value: https://office.autarq.now
+            - name: DOCUMENT_SERVER_URL
+              value: https://eurooffice.autarq.now
+            - name: STORAGE_DIR
+              value: /data
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: documentserver-jwt
+                  key: jwtSecret
+            - name: BASIC_AUTH_USER
+              valueFrom:
+                secretKeyRef:
+                  name: office-portal-auth
+                  key: BASIC_AUTH_USER
+            - name: BASIC_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: office-portal-auth
+                  key: BASIC_AUTH_PASSWORD
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 20
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: office-portal-data

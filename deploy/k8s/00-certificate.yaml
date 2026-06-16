@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: office-portal-certificates
+  namespace: eurooffice-shared
+spec:
+  secretName: office-portal-tls
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt
+  commonName: office.autarq.now
+  dnsNames:
+    - office.autarq.now

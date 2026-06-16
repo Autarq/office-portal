@@ -1,0 +1,20 @@
+{
+  "name": "autarq-office-portal",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AUTARQ Office portal in front of EuroOffice/ONLYOFFICE DocumentServer.",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test",
+    "check": "node --check src/*.js && node --check test/*.test.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "jszip": "^3.10.1",
+    "multer": "^2.0.2"
+  }
+}
