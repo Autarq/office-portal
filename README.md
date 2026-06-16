@@ -53,7 +53,7 @@ If `BASIC_AUTH_USER` and `BASIC_AUTH_PASSWORD` are set, browser-facing routes re
 
 ## Kubernetes
 
-The included manifests target the existing production namespace:
+The included manifests target the existing production namespace and use the public GHCR image built by CI:
 
 ```text
 eurooffice-shared
