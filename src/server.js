@@ -65,6 +65,15 @@ export function createServer({ config, store }) {
     }
   });
 
+  app.post("/api/files/:id/delete", async (req, res, next) => {
+    try {
+      await store.delete(req.params.id);
+      res.redirect("/");
+    } catch (error) {
+      next(error);
+    }
+  });
+
   app.get("/editor/:id", async (req, res, next) => {
     try {
       const file = await store.get(req.params.id);

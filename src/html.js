@@ -108,6 +108,9 @@ function fileCard(file) {
       <p>${escapeHtml(formatBytes(file.size))} · Version ${file.version}</p>
       <time datetime="${escapeHtml(file.updatedAt)}">${escapeHtml(formatDate(file.updatedAt))}</time>
     </a>
+    <form class="delete-form" action="/api/files/${encodeURIComponent(file.id)}/delete" method="post">
+      <button type="submit" aria-label="${escapeHtml(file.name)} loeschen">Delete</button>
+    </form>
   </article>`;
 }
 
@@ -232,6 +235,7 @@ h1 {
   gap: 12px;
 }
 .file-card {
+  position: relative;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--panel);
@@ -271,6 +275,19 @@ h1 {
   margin-top: 16px;
   color: var(--muted);
   font-size: 13px;
+}
+.delete-form {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+.delete-form button {
+  padding: 5px 8px;
+  min-width: 0;
+  color: #7a1f26;
+  background: #fff8f8;
+  border-color: #efc4c8;
+  font-size: 12px;
 }
 .empty {
   grid-column: 1 / -1;

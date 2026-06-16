@@ -72,6 +72,17 @@ export class FileStore {
     return record;
   }
 
+  async delete(id) {
+    const index = await this.readIndex();
+    const nextIndex = index.filter((item) => item.id !== id);
+    if (nextIndex.length === index.length) {
+      return false;
+    }
+    await fs.rm(this.recordDir(id), { recursive: true, force: true });
+    await this.writeIndex(nextIndex);
+    return true;
+  }
+
   async readContent(record) {
     return fs.readFile(this.recordPath(record));
   }
